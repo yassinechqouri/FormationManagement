@@ -1,0 +1,85 @@
+@model FormationManagement.Web.ViewModels.Course.CourseCatalogViewModel
+@{ ViewData["Title"] = "Browse Courses"; }
+
+<h1 class="mb-4">Browse Courses</h1>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search courses..." />
+    </div>
+    <div class="col-md-2">
+        <select name="CategoryId" class="form-select">
+            <option value="">All Categories</option>
+            @foreach (var c in Model.Categories)
+            {
+                <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="TrainerId" class="form-select">
+            <option value="">All Trainers</option>
+            @foreach (var t in Model.Trainers)
+            {
+                <option value="@t.Id" selected="@(Model.TrainerId == t.Id)">@t.FullName</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="Level" class="form-select">
+            <option value="">Any Level</option>
+            @foreach (var level in Enum.GetValues<FormationManagement.Domain.Enums.CourseLevel>())
+            {
+                <option value="@level" selected="@(Model.Level == level)">@level</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="SortBy" class="form-select">
+            @foreach (var option in Enum.GetValues<FormationManagement.Application.DTOs.Course.CourseSortOption>())
+            {
+                <option value="@option" selected="@(Model.SortBy == option)">@option</option>
+            }
+        </select>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var course in Model.Courses)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="@(string.IsNullOrEmpty(course.Thumbnail) ? "https://placehold.co/400x220?text=Course" : course.Thumbnail)" class="card-img-top course-thumb" alt="@course.Title">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">@course.CategoryName</span>
+                    <span class="badge bg-light text-dark mb-2">@course.Level</span>
+                    <h5 class="card-title">@course.Title</h5>
+                    <p class="card-text text-muted small">by @course.TrainerName</p>
+                    <p class="fw-bold">@(course.Price == 0 ? "Free" : course.Price.ToString("C"))</p>
+                    <a asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm">View Course</a>
+                </div>
+            </div>
+        </div>
+    }
+    @if (!Model.Courses.Any())
+    {
+        <p class="text-muted">No courses match your search.</p>
+    }
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+        <ul class="pagination">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-route-pageNumber="@i" asp-route-searchTerm="@Model.SearchTerm" asp-route-categoryId="@Model.CategoryId" asp-route-trainerId="@Model.TrainerId" asp-route-level="@Model.Level" asp-route-sortBy="@Model.SortBy">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

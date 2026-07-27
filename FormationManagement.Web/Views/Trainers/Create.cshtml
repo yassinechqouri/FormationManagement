@@ -1,0 +1,55 @@
+@model FormationManagement.Application.DTOs.Trainer.TrainerUpsertDto
+@{
+    ViewData["Title"] = "New Trainer";
+    Layout = "_AdminLayout";
+}
+
+<h1 class="mb-4">New Trainer Profile</h1>
+
+<form asp-action="Create" method="post" class="col-md-6">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">Linked Identity account</label>
+        <select asp-for="ApplicationUserId" class="form-select">
+            <option value="">-- Select a user with the Trainer role --</option>
+            @foreach (var user in (IEnumerable<FormationManagement.Application.Interfaces.UserSummaryDto>)ViewBag.EligibleUsers)
+            {
+                <option value="@user.Id">@user.FullName (@user.Email)</option>
+            }
+        </select>
+        <div class="form-text">Only accounts already assigned the <strong>Trainer</strong> role (via Manage Users) appear here.</div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Biography" class="form-label"></label>
+        <textarea asp-for="Biography" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,33 @@
+# Railway deployment config for the Formation Management System.
+# Docs: https://docs.railway.app/deploy/config-as-code
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "dotnet FormationManagement.Web.dll"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# ---------------------------------------------------------------------------
+# Required environment variables to set in the Railway project dashboard
+# (Settings > Variables) — do NOT commit real secrets to this file:
+#
+#   ConnectionStrings__DefaultConnection = <your Railway SQL Server / Azure SQL connection string>
+#   AIAvatar__Provider                  = HeyGen           (or "DId")
+#   AIAvatar__BaseUrl                   = https://api.heygen.com/
+#   AIAvatar__ApiKey                    = <your provider API key>
+#   AIAvatar__AvatarId                  = <your avatar id>
+#   AIAvatar__VoiceId                   = <your voice id>
+#   ASPNETCORE_ENVIRONMENT               = Production
+#
+# Railway does not offer a managed SQL Server instance directly — provision
+# one on Azure SQL (or another SQL Server-compatible host reachable over the
+# public internet) and paste its connection string above. If you'd rather use
+# Railway's built-in Postgres, switch the EF Core provider in
+# FormationManagement.Infrastructure/DependencyInjection.cs from
+# UseSqlServer(...) to UseNpgsql(...) and add the Npgsql EF Core package.
+# ---------------------------------------------------------------------------

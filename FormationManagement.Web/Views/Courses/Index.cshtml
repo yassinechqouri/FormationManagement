@@ -1,0 +1,98 @@
+@model FormationManagement.Web.ViewModels.Course.CourseCatalogViewModel
+@{
+    ViewData["Title"] = "Manage Courses";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Courses</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Course</a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search title/description..." />
+    </div>
+    <div class="col-md-2">
+        <select name="CategoryId" class="form-select">
+            <option value="">All Categories</option>
+            @foreach (var c in Model.Categories)
+            {
+                <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="TrainerId" class="form-select">
+            <option value="">All Trainers</option>
+            @foreach (var t in Model.Trainers)
+            {
+                <option value="@t.Id" selected="@(Model.TrainerId == t.Id)">@t.FullName</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="SortBy" class="form-select">
+            @foreach (var option in Enum.GetValues<FormationManagement.Application.DTOs.Course.CourseSortOption>())
+            {
+                <option value="@option" selected="@(Model.SortBy == option)">@option</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-outline-primary w-100">Filter</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white shadow-sm align-middle">
+        <thead>
+            <tr><th>Title</th><th>Category</th><th>Trainer</th><th>Price</th><th>Enrollments</th><th>Published</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model.Courses)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.CategoryName</td>
+                    <td>@course.TrainerName</td>
+                    <td>@course.Price.ToString("C")</td>
+                    <td>@course.EnrollmentCount</td>
+                    <td>
+                        <form asp-action="TogglePublish" asp-route-id="@course.Id" method="post" class="d-inline">
+                            <input type="hidden" name="published" value="@(!course.Published)" />
+                            <button type="submit" class="btn btn-sm @(course.Published ? "btn-success" : "btn-outline-secondary")">
+                                @(course.Published ? "Published" : "Draft")
+                            </button>
+                        </form>
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="Content" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-primary">Content</a>
+                        <a asp-action="Edit" asp-route-id="@course.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@course.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this course?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Courses.Any())
+            {
+                <tr><td colspan="7" class="text-muted text-center">No courses match your filters.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-route-pageNumber="@i" asp-route-searchTerm="@Model.SearchTerm" asp-route-categoryId="@Model.CategoryId" asp-route-trainerId="@Model.TrainerId" asp-route-sortBy="@Model.SortBy">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

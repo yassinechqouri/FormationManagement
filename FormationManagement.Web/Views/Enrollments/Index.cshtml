@@ -1,0 +1,34 @@
+@model IReadOnlyList<FormationManagement.Application.DTOs.Enrollment.EnrollmentDto>
+@{
+    ViewData["Title"] = "Enrollments";
+    Layout = "_AdminLayout";
+}
+
+<h1 class="mb-4">Enrollments</h1>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white shadow-sm align-middle">
+        <thead>
+            <tr><th>Learner</th><th>Course</th><th>Enrollment Date</th><th>Progress</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.LearnerName <div class="text-muted small">@e.LearnerEmail</div></td>
+                    <td>@e.CourseTitle</td>
+                    <td>@e.EnrollmentDate.ToString("yyyy-MM-dd")</td>
+                    <td style="width:200px;">
+                        <div class="progress" style="height: 18px;">
+                            <div class="progress-bar" style="width:@e.Progress%">@e.Progress%</div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="4" class="text-muted text-center">No enrollments yet.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

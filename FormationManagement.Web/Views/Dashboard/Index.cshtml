@@ -1,0 +1,83 @@
+@model FormationManagement.Application.DTOs.Dashboard.DashboardStatsDto
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4 col-lg-2">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Users</div>
+                <div class="stat-value">@Model.TotalUsers</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Courses</div>
+                <div class="stat-value">@Model.TotalCourses</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Trainers</div>
+                <div class="stat-value">@Model.TotalTrainers</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Enrollments</div>
+                <div class="stat-value">@Model.TotalEnrollments</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Published Courses</div>
+                <div class="stat-value">@Model.PublishedCourses</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mb-3">Recent Enrollments</h4>
+<div class="table-responsive">
+    <table class="table table-hover align-middle bg-white shadow-sm">
+        <thead>
+            <tr>
+                <th>Learner</th>
+                <th>Course</th>
+                <th>Enrollment Date</th>
+                <th>Progress</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.RecentEnrollments)
+            {
+                <tr>
+                    <td>@e.LearnerName <div class="text-muted small">@e.LearnerEmail</div></td>
+                    <td>@e.CourseTitle</td>
+                    <td>@e.EnrollmentDate.ToString("yyyy-MM-dd")</td>
+                    <td style="width:180px;">
+                        <div class="progress" style="height: 18px;">
+                            <div class="progress-bar" style="width:@e.Progress%">@e.Progress%</div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.RecentEnrollments.Any())
+            {
+                <tr><td colspan="4" class="text-muted text-center">No enrollments yet.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

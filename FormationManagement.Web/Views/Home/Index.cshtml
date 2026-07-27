@@ -1,0 +1,32 @@
+@model List<FormationManagement.Application.DTOs.Course.CourseDto>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="p-5 mb-4 bg-primary bg-gradient text-white rounded-3 shadow-sm">
+    <h1 class="display-5 fw-bold">Learn new skills, taught by real trainers.</h1>
+    <p class="col-md-8 fs-5">Browse our catalog, enroll in a course, and learn alongside an AI trainer avatar that presents each lesson and answers your questions in real time.</p>
+    <a class="btn btn-light btn-lg" asp-controller="Course" asp-action="Index">Browse Courses</a>
+</div>
+
+<h2 class="mb-3">Popular Courses</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var course in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="@(string.IsNullOrEmpty(course.Thumbnail) ? "https://placehold.co/400x220?text=Course" : course.Thumbnail)" class="card-img-top course-thumb" alt="@course.Title">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">@course.CategoryName</span>
+                    <h5 class="card-title">@course.Title</h5>
+                    <p class="card-text text-muted small">by @course.TrainerName &middot; @course.Level</p>
+                    <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm">View Course</a>
+                </div>
+            </div>
+        </div>
+    }
+    @if (!Model.Any())
+    {
+        <p class="text-muted">No published courses yet — check back soon!</p>
+    }
+</div>

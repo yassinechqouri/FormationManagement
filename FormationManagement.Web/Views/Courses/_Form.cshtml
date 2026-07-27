@@ -1,0 +1,81 @@
+@model FormationManagement.Application.DTOs.Course.CourseUpsertDto
+@{
+    var categories = (IEnumerable<FormationManagement.Application.DTOs.Category.CategoryDto>)ViewBag.Categories;
+    var trainers = ViewBag.Trainers as IEnumerable<FormationManagement.Application.DTOs.Trainer.TrainerDto>;
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="Id" />
+
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" class="form-select">
+            <option value="">-- Select --</option>
+            @foreach (var c in categories)
+            {
+                <option value="@c.Id">@c.Name</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    @if (trainers != null)
+    {
+        <div class="col-md-6 mb-3">
+            <label asp-for="TrainerId" class="form-label"></label>
+            <select asp-for="TrainerId" class="form-select">
+                <option value="">-- Select --</option>
+                @foreach (var t in trainers)
+                {
+                    <option value="@t.Id">@t.FullName</option>
+                }
+            </select>
+            <span asp-validation-for="TrainerId" class="text-danger"></span>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="Level" class="form-label"></label>
+        <select asp-for="Level" class="form-select">
+            @foreach (var level in Enum.GetValues<FormationManagement.Domain.Enums.CourseLevel>())
+            {
+                <option value="@level">@level</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="Duration" class="form-label">Duration (minutes)</label>
+        <input asp-for="Duration" class="form-control" type="number" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Thumbnail" class="form-label">Thumbnail URL</label>
+    <input asp-for="Thumbnail" class="form-control" placeholder="https://..." />
+</div>
+
+<div class="form-check mb-3">
+    <input asp-for="Published" class="form-check-input" />
+    <label asp-for="Published" class="form-check-label"></label>
+</div>

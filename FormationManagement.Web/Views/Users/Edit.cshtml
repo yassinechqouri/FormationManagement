@@ -1,0 +1,28 @@
+@model FormationManagement.Infrastructure.Identity.ApplicationUser
+@{
+    ViewData["Title"] = "Manage User Role";
+    Layout = "_AdminLayout";
+    var currentRoles = (IList<string>)ViewBag.CurrentRoles;
+    var allRoles = (string[])ViewBag.AllRoles;
+}
+
+<h1 class="mb-4">@Model.FullName</h1>
+<p class="text-muted">@Model.Email</p>
+
+<form asp-action="SetRole" method="post" class="col-md-5">
+    <input type="hidden" name="userId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Role</label>
+        <select name="role" class="form-select">
+            @foreach (var role in allRoles)
+            {
+                <option value="@role" selected="@currentRoles.Contains(role)">@role</option>
+            }
+        </select>
+        <div class="form-text">Changing this replaces the user's current role(s) with the one selected.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Role</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

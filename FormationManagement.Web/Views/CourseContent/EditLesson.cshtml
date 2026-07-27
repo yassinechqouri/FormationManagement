@@ -1,0 +1,61 @@
+@model FormationManagement.Application.DTOs.Module.LessonUpsertDto
+@{ ViewData["Title"] = "Edit Lesson"; }
+
+<h1 class="mb-4">Edit Lesson</h1>
+
+<form method="post" class="col-md-6">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ModuleId" />
+    <input type="hidden" name="courseId" value="@ViewBag.CourseId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VideoUrl" class="form-label">Video URL</label>
+        <input asp-for="VideoUrl" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DocumentUrl" class="form-label">Document URL</label>
+        <input asp-for="DocumentUrl" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Duration" class="form-label">Duration (minutes)</label>
+        <input asp-for="Duration" class="form-control" type="number" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-controller="Courses" asp-action="Content" asp-route-courseId="@ViewBag.CourseId" class="btn btn-outline-secondary">Back to Course</a>
+</form>
+
+<hr class="my-4" />
+
+<h4>Exercises &amp; Quizzes</h4>
+<p class="text-muted">Add a quick exercise or quiz to this lesson.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="CourseContent" asp-action="CreateExercise" asp-route-courseId="@ViewBag.CourseId" method="post" class="border rounded p-3 mb-3">
+            <input type="hidden" name="LessonId" value="@Model.Id" />
+            <h6>New Exercise</h6>
+            <input name="Title" class="form-control mb-2" placeholder="Exercise title" required />
+            <textarea name="Description" class="form-control mb-2" placeholder="Description" rows="2" required></textarea>
+            <button type="submit" class="btn btn-sm btn-primary">Add Exercise</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <form asp-controller="CourseContent" asp-action="CreateQuiz" asp-route-courseId="@ViewBag.CourseId" method="post" class="border rounded p-3 mb-3">
+            <input type="hidden" name="LessonId" value="@Model.Id" />
+            <h6>New Quiz</h6>
+            <input name="Title" class="form-control mb-2" placeholder="Quiz title" required />
+            <button type="submit" class="btn btn-sm btn-primary">Add Quiz</button>
+            <span class="form-text d-block mt-1">Add questions to it afterwards from the course content page.</span>
+        </form>
+    </div>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,34 @@
+@model IReadOnlyList<FormationManagement.Application.DTOs.Course.CourseDto>
+@{ ViewData["Title"] = "My Workspace"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>My Courses</h1>
+    <a asp-action="CreateCourse" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Course</a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var course in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="@(string.IsNullOrEmpty(course.Thumbnail) ? "https://placehold.co/400x220?text=Course" : course.Thumbnail)" class="card-img-top course-thumb" alt="@course.Title">
+                <div class="card-body">
+                    <span class="badge @(course.Published ? "bg-success" : "bg-secondary") mb-2">@(course.Published ? "Published" : "Draft")</span>
+                    <h5 class="card-title">@course.Title</h5>
+                    <p class="text-muted small">@course.EnrollmentCount enrolled &middot; @course.ModuleCount module(s)</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a asp-action="EditCourse" asp-route-id="@course.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-controller="Courses" asp-action="Content" asp-route-courseId="@course.Id" class="btn btn-sm btn-primary">Manage Content</a>
+                </div>
+            </div>
+        </div>
+    }
+    @if (!Model.Any())
+    {
+        <p class="text-muted">You haven't created any courses yet.</p>
+    }
+</div>
+
+<hr class="my-4" />
+<a asp-action="Students" class="btn btn-outline-primary"><i class="bi bi-people"></i> View Enrolled Students</a>

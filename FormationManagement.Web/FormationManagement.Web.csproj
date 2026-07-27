@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>FormationManagement.Web</RootNamespace>
+    <UserSecretsId>formation-management-secrets</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!-- Reports: Excel export -->
+    <PackageReference Include="ClosedXML" Version="0.104.1" />
+
+    <!-- Reports: PDF export -->
+    <PackageReference Include="QuestPDF" Version="2024.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FormationManagement.Domain\FormationManagement.Domain.csproj" />
+    <ProjectReference Include="..\FormationManagement.Application\FormationManagement.Application.csproj" />
+    <ProjectReference Include="..\FormationManagement.Infrastructure\FormationManagement.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

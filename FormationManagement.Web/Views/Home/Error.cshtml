@@ -1,0 +1,9 @@
+@model string
+@{ ViewData["Title"] = "Error"; }
+
+<h1 class="text-danger">An error occurred while processing your request.</h1>
+@if (!string.IsNullOrEmpty(Model))
+{
+    <p>Request ID: <code>@Model</code></p>
+}
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to Home</a>

@@ -1,0 +1,34 @@
+@model FormationManagement.Application.DTOs.Module.LessonUpsertDto
+@{ ViewData["Title"] = "Add Lesson"; }
+
+<h1 class="mb-4">Add Lesson</h1>
+
+<form method="post" class="col-md-6">
+    <input type="hidden" asp-for="ModuleId" />
+    <input type="hidden" name="courseId" value="@ViewBag.CourseId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VideoUrl" class="form-label">Video URL</label>
+        <input asp-for="VideoUrl" class="form-control" placeholder="https://..." />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DocumentUrl" class="form-label">Document URL</label>
+        <input asp-for="DocumentUrl" class="form-control" placeholder="https://..." />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Duration" class="form-label">Duration (minutes)</label>
+        <input asp-for="Duration" class="form-control" type="number" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-controller="Courses" asp-action="Content" asp-route-courseId="@ViewBag.CourseId" class="btn btn-outline-secondary">Back to Course</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,32 @@
+@model FormationManagement.Application.DTOs.Module.ModuleUpsertDto
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Add Module" : "Edit Module";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<form method="post" class="col-md-6">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CourseId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Order" class="form-label"></label>
+        <input asp-for="Order" class="form-control" type="number" />
+        <span asp-validation-for="Order" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-controller="Courses" asp-action="Content" asp-route-courseId="@Model.CourseId" class="btn btn-outline-secondary">Back to Course</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

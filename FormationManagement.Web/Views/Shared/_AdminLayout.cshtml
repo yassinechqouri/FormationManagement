@@ -1,0 +1,38 @@
+@{
+    Layout = "_Layout";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<div class="row">
+    <nav class="col-md-3 col-lg-2 d-md-block bg-white border-end sidebar py-3">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action @(currentController == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Users" ? "active" : "")" asp-controller="Users" asp-action="Index">
+                <i class="bi bi-people me-2"></i> Manage Users
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Trainers" ? "active" : "")" asp-controller="Trainers" asp-action="Index">
+                <i class="bi bi-person-badge me-2"></i> Manage Trainers
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Categories" ? "active" : "")" asp-controller="Categories" asp-action="Index">
+                <i class="bi bi-tags me-2"></i> Manage Categories
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Courses" ? "active" : "")" asp-controller="Courses" asp-action="Index">
+                <i class="bi bi-journal-bookmark me-2"></i> Manage Courses
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Enrollments" ? "active" : "")" asp-controller="Enrollments" asp-action="Index">
+                <i class="bi bi-clipboard-check me-2"></i> Enrollments
+            </a>
+            <a class="list-group-item list-group-item-action @(currentController == "Reports" ? "active" : "")" asp-controller="Reports" asp-action="Index">
+                <i class="bi bi-file-earmark-arrow-down me-2"></i> Reports
+            </a>
+        </div>
+    </nav>
+
+    <main class="col-md-9 col-lg-10 py-3">
+        @RenderBody()
+    </main>
+</div>
+
+@await RenderSectionAsync("Scripts", required: false)

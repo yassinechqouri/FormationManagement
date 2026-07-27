@@ -1,0 +1,13 @@
+@model FormationManagement.Application.DTOs.Course.CourseUpsertDto
+@{ ViewData["Title"] = "New Course"; }
+
+<h1 class="mb-4">New Course</h1>
+
+<form asp-action="CreateCourse" method="post" class="col-md-8">
+    <input type="hidden" asp-for="TrainerId" />
+    <partial name="../Courses/_Form" model="Model" />
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

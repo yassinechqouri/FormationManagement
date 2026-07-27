@@ -1,0 +1,9 @@
+@model FormationManagement.Application.DTOs.Quiz.QuizResultDto
+@{ ViewData["Title"] = "Quiz Result"; }
+
+<div class="text-center">
+    <i class="bi bi-award display-4 text-primary"></i>
+    <h1 class="mt-3">You scored @Model.ScorePercentage%</h1>
+    <p class="lead">@Model.CorrectAnswers out of @Model.TotalQuestions correct.</p>
+    <a asp-controller="Course" asp-action="MyCourses" class="btn btn-primary">Back to My Courses</a>
+</div>
