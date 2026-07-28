@@ -60,11 +60,67 @@ public class DIdAvatarService : IAIAvatarService
             using var doc = JsonDocument.Parse(body);
             var talkId = doc.RootElement.GetProperty("id").GetString();
 
+            // The POST above only starts rendering — D-ID needs another
+            // 10-30 seconds to actually produce the video file. Poll the
+            // status endpoint until it reports "done" and hands back a real,
+            // playable result_url (an mp4 hosted on D-ID's storage), rather
+            // than pointing the <video> tag at the status-check API itself.
+            const int maxAttempts = 20;
+            const int delayMilliseconds = 3000;
+
+            for (var attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                await Task.Delay(delayMilliseconds, cancellationToken);
+
+                var statusResponse = await _httpClient.GetAsync($"talks/{talkId}", cancellationToken);
+                var statusBody = await statusResponse.Content.ReadAsStringAsync(cancellationToken);
+
+                if (!statusResponse.IsSuccessStatusCode)
+                {
+                    return new AvatarResponse
+                    {
+                        Success = false,
+                        ErrorMessage = $"D-ID status check returned {(int)statusResponse.StatusCode}: {statusBody}",
+                        ResponseText = lessonScript
+                    };
+                }
+
+                using var statusDoc = JsonDocument.Parse(statusBody);
+                var status = statusDoc.RootElement.GetProperty("status").GetString();
+
+                if (status == "done")
+                {
+                    var resultUrl = statusDoc.RootElement.GetProperty("result_url").GetString();
+                    return new AvatarResponse
+                    {
+                        ResponseText = lessonScript,
+                        VideoUrl = resultUrl,
+                        Success = true
+                    };
+                }
+
+                if (status == "error" || status == "rejected")
+                {
+                    var errorDetails = statusDoc.RootElement.TryGetProperty("error", out var errorProp)
+                        ? errorProp.ToString()
+                        : status;
+
+                    return new AvatarResponse
+                    {
+                        Success = false,
+                        ErrorMessage = $"D-ID video generation failed: {errorDetails}",
+                        ResponseText = lessonScript
+                    };
+                }
+
+                // status is "created" or "started" — still rendering, keep polling.
+            }
+
             return new AvatarResponse
             {
-                ResponseText = lessonScript,
-                VideoUrl = $"{_options.BaseUrl}talks/{talkId}",
-                Success = true
+                Success = false,
+                ErrorMessage = "D-ID video took too long to render (timed out after ~60 seconds).",
+                ResponseText = lessonScript
             };
         }
         catch (Exception ex)
